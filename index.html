@@ -1,0 +1,455 @@
+import React, { useState, useEffect } from 'react';
+import { 
+  Mountain, 
+  Map, 
+  ShoppingBag, 
+  Info, 
+  Users, 
+  Calendar, 
+  Clock, 
+  MapPin, 
+  Trophy, 
+  Menu, 
+  X, 
+  ChevronRight,
+  ShieldCheck,
+  Facebook,
+  Instagram,
+  Twitter,
+  ShoppingCart,
+  Hotel,
+  Star,
+  ExternalLink,
+  Mail,
+  Phone,
+  User
+} from 'lucide-react';
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('inicio');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+
+  const eventDetails = {
+    date: "21 de Febrero, 2026",
+    location: "Caldas de Reis, Pontevedra",
+    organizer: "FEDME",
+    categories: ["Absoluta", "Junior", "Veteranos"],
+    distances: [
+      { name: "Trail Nacional", distance: "42K", elevation: "+2100m", time: "8h" },
+      { name: "Trail Medio", distance: "20K", elevation: "+1100m", time: "5h" },
+      { name: "Trail Junior", distance: "8K", elevation: "+400m", time: "2h" }
+    ]
+  };
+
+  const sponsors = [
+    { name: "Gadis", logo: "🛒", type: "Alimentación Oficial" },
+    { name: "Decathlon", logo: "⛺", type: "Technical Partner" },
+    { name: "Décimas", logo: "👟", type: "Retail Partner" },
+    { name: "Nike Trail", logo: "✔️", type: "Main Sponsor" },
+    { name: "Concello de Caldas", logo: "🏛️", type: "Institutional" },
+    { name: "FEDME", logo: "🏔️", type: "Organizer" }
+  ];
+
+  const hotels = [
+    {
+      id: 1,
+      name: "Hotel Balneario Acuña",
+      stars: 3,
+      price: "Desde 65€/noche",
+      desc: "Histórico balneario a orillas del río Umia, perfecto para la recuperación tras la carrera.",
+      features: ["Spa Térmico", "Restaurante", "Cerca de salida"],
+      img: "🏨"
+    },
+    {
+      id: 2,
+      name: "Torre do Rio",
+      stars: 4,
+      price: "Desde 90€/noche",
+      desc: "Alojamiento con encanto en una antigua fábrica textil recuperada, rodeada de cascadas.",
+      features: ["Piscina natural", "Desayuno incluido", "Vistas"],
+      img: "🏡"
+    },
+    {
+      id: 3,
+      name: "Hotel Cruceiro",
+      stars: 2,
+      price: "Desde 45€/noche",
+      desc: "Opción económica y funcional en el centro del pueblo, muy frecuentada por deportistas.",
+      features: ["WiFi gratuito", "Parking", "Céntrico"],
+      img: "🏢"
+    }
+  ];
+
+  const merchandise = [
+    { id: 1, name: "Camiseta Oficial Trail 2026", price: 20, img: "👕" },
+    { id: 2, name: "Chubasquero Técnico", price: 40, img: "🧥" },
+    { id: 3, name: "Botas de Trail Elite", price: 45, img: "🥾" }
+  ];
+
+  const addToCart = () => setCartCount(prev => prev + 1);
+
+  const Navigation = () => (
+    <nav className="bg-slate-900 text-white sticky top-0 z-50 shadow-xl">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => setActiveTab('inicio')}>
+            <Mountain className="text-emerald-500 w-8 h-8" />
+            <span className="font-bold text-xl tracking-tight uppercase">TRAIL NACIONAL 2026</span>
+          </div>
+          
+          <div className="hidden lg:block">
+            <div className="ml-10 flex items-baseline space-x-2">
+              {['inicio', 'recorrido', 'alojamiento', 'reglamento', 'tienda', 'inscripciones'].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-3 py-2 rounded-md text-xs font-bold uppercase tracking-widest transition-all ${
+                    activeTab === tab ? 'text-emerald-400 bg-slate-800' : 'text-gray-300 hover:text-white hover:bg-slate-800'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="relative cursor-pointer" onClick={() => setActiveTab('tienda')}>
+              <ShoppingCart className="w-6 h-6 text-gray-300 hover:text-white" />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </div>
+            <div className="lg:hidden">
+              <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                {isMenuOpen ? <X /> : <Menu />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {isMenuOpen && (
+        <div className="lg:hidden bg-slate-800 px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          {['inicio', 'recorrido', 'alojamiento', 'reglamento', 'tienda', 'inscripciones'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => { setActiveTab(tab); setIsMenuOpen(false); }}
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white"
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </div>
+      )}
+    </nav>
+  );
+
+  const Home = () => (
+    <div className="animate-fadeIn">
+      <div className="relative h-[85vh] flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-black/50 z-10" />
+        <img 
+          src="https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&q=80&w=1600" 
+          alt="Paisaje de Trail"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="relative z-20 text-center px-4">
+          <h2 className="text-emerald-400 font-bold text-xl md:text-2xl mb-2 tracking-[0.3em]">CALDAS DE REIS</h2>
+          <h1 className="text-white text-5xl md:text-8xl font-black mb-6 drop-shadow-2xl italic">
+            TRAIL <span className="text-emerald-500">2026</span>
+          </h1>
+          <p className="text-white text-lg md:text-2xl mb-8 max-w-3xl mx-auto font-light">
+            El mayor desafío de montaña llega al corazón de Galicia. ¿Estás listo para el Campeonato Nacional?
+          </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <button 
+              onClick={() => setActiveTab('inscripciones')}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-10 py-5 rounded-full font-black text-lg transition-all hover:scale-105 shadow-xl shadow-emerald-900/20 flex items-center gap-2"
+            >
+              INSCRIBIRSE (30€) <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white py-12 border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4">
+          <p className="text-center text-gray-400 text-sm font-bold uppercase tracking-widest mb-10">Patrocinadores Oficiales</p>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-70 hover:opacity-100 transition-opacity">
+            {sponsors.map((s, i) => (
+              <div key={i} className="flex flex-col items-center">
+                <span className="text-4xl mb-2">{s.logo}</span>
+                <span className="text-[10px] font-black uppercase text-slate-400">{s.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-slate-900 text-white py-16 px-4">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+          <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
+            <Calendar className="w-12 h-12 mb-6 text-emerald-500 mx-auto" />
+            <h3 className="text-2xl font-bold mb-2">{eventDetails.date}</h3>
+            <p className="text-gray-400">Apertura de cajones: 07:30h</p>
+          </div>
+          <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
+            <MapPin className="w-12 h-12 mb-6 text-emerald-500 mx-auto" />
+            <h3 className="text-2xl font-bold mb-2">{eventDetails.location}</h3>
+            <p className="text-gray-400">Pontevedra, España</p>
+          </div>
+          <div className="p-8 rounded-3xl bg-white/5 border border-white/10">
+            <Trophy className="w-12 h-12 mb-6 text-emerald-500 mx-auto" />
+            <h3 className="text-2xl font-bold mb-2">Premios Élite</h3>
+            <p className="text-gray-400">Podios en todas las categorías</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const Alojamiento = () => (
+    <div className="py-20 px-4 max-w-7xl mx-auto animate-fadeIn">
+      <div className="text-center mb-16">
+        <h2 className="text-4xl font-black text-slate-900 mb-4 italic uppercase">Zonas de Hoteles</h2>
+        <p className="text-gray-500 max-w-2xl mx-auto">Hemos seleccionado los mejores establecimientos en Caldas de Reis para garantizar tu descanso y rendimiento.</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {hotels.map((h) => (
+          <div key={h.id} className="bg-white rounded-[2rem] overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl transition-all">
+            <div className="h-48 bg-emerald-50 flex items-center justify-center text-7xl">
+              {h.img}
+            </div>
+            <div className="p-8">
+              <div className="flex gap-1 mb-2">
+                {[...Array(h.stars)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-2">{h.name}</h3>
+              <p className="text-emerald-600 font-black mb-4">{h.price}</p>
+              <p className="text-gray-600 text-sm mb-6 leading-relaxed">{h.desc}</p>
+              
+              <div className="flex flex-wrap gap-2 mb-8">
+                {h.features.map((f, i) => (
+                  <span key={i} className="text-[10px] font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full uppercase tracking-tighter">
+                    {f}
+                  </span>
+                ))}
+              </div>
+
+              <button className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-emerald-600 transition-colors">
+                RESERVAR AHORA <ExternalLink className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const Tienda = () => (
+    <div className="py-20 px-4 max-w-7xl mx-auto animate-fadeIn">
+      <div className="text-center mb-16">
+        <h2 className="text-4xl font-black text-slate-900 mb-4 italic uppercase">Merchandising Oficial</h2>
+        <p className="text-gray-500 max-w-2xl mx-auto">Equipación técnica de alta calidad para tus entrenamientos y competición.</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        {merchandise.map((item) => (
+          <div key={item.id} className="group bg-white rounded-[2.5rem] overflow-hidden shadow-sm border border-gray-100 flex flex-col hover:scale-[1.02] transition-transform">
+            <div className="h-72 bg-slate-50 flex items-center justify-center text-9xl group-hover:scale-110 transition-transform">
+              {item.img}
+            </div>
+            <div className="p-10">
+              <h3 className="text-2xl font-black text-slate-800 mb-2">{item.name}</h3>
+              <p className="text-emerald-600 text-3xl font-black mb-8">{item.price}€</p>
+              <button 
+                onClick={addToCart}
+                className="w-full bg-slate-900 text-white py-5 rounded-2xl font-black flex items-center justify-center gap-3 hover:bg-emerald-600 transition-colors shadow-lg"
+              >
+                <ShoppingBag className="w-6 h-6" /> COMPRAR
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const Footer = () => (
+    <footer className="bg-slate-900 text-white pt-20 pb-10 px-4">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-16 border-b border-slate-800 pb-16">
+        <div className="col-span-1 md:col-span-2">
+          <div className="flex items-center gap-3 mb-6">
+            <Mountain className="text-emerald-500 w-10 h-10" />
+            <span className="font-black text-3xl italic tracking-tighter">TRAIL CALDAS 2026</span>
+          </div>
+          <p className="text-gray-400 max-w-md leading-relaxed">
+            Sigue nuestras redes sociales para estar al día de las últimas noticias, 
+            cambios en el recorrido y avisos meteorológicos.
+          </p>
+        </div>
+        <div>
+          <h4 className="font-bold text-white mb-6 uppercase tracking-widest text-sm">Legal</h4>
+          <ul className="space-y-4 text-gray-400 text-sm font-medium">
+            <li className="hover:text-emerald-500 cursor-pointer transition-colors">Privacidad</li>
+            <li className="hover:text-emerald-500 cursor-pointer transition-colors">Términos y condiciones</li>
+          </ul>
+        </div>
+      </div>
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-[10px] font-bold uppercase tracking-widest">
+        <span>© 2026 CAMPEONATO NACIONAL DE TRAIL</span>
+        <div className="flex gap-6">
+          <Facebook className="w-4 h-4 cursor-pointer hover:text-white" />
+          <Instagram className="w-4 h-4 cursor-pointer hover:text-white" />
+          <Twitter className="w-4 h-4 cursor-pointer hover:text-white" />
+        </div>
+      </div>
+    </footer>
+  );
+
+  return (
+    <div className="min-h-screen bg-[#FDFDFD] font-sans selection:bg-emerald-200 text-slate-900">
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+      `}</style>
+      
+      <Navigation />
+
+      <main>
+        {activeTab === 'inicio' && <Home />}
+        {activeTab === 'alojamiento' && <Alojamiento />}
+        {activeTab === 'tienda' && <Tienda />}
+        {activeTab === 'recorrido' && (
+          <div className="py-20 px-4 max-w-7xl mx-auto animate-fadeIn text-center">
+             <h2 className="text-4xl font-black mb-12 italic uppercase">Circuitos y Desniveles</h2>
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                {eventDetails.distances.map((d, i) => (
+                  <div key={i} className="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between items-center mb-6">
+                        <h3 className="text-2xl font-black text-slate-800">{d.name}</h3>
+                        <span className="bg-emerald-500 text-white text-xs font-black px-4 py-2 rounded-full">{d.distance}</span>
+                      </div>
+                      <div className="space-y-2 mb-8 text-gray-500">
+                        <p className="flex items-center gap-2"><Clock className="w-4 h-4"/> Tiempo límite: {d.time}</p>
+                        <p className="flex items-center gap-2"><Mountain className="w-4 h-4"/> Desnivel: {d.elevation}</p>
+                      </div>
+                    </div>
+                    <button className="w-full border-2 border-slate-900 py-4 rounded-2xl font-black hover:bg-slate-900 hover:text-white transition-all">VER MAPA</button>
+                  </div>
+                ))}
+             </div>
+          </div>
+        )}
+        {activeTab === 'reglamento' && (
+          <div className="py-20 px-4 max-w-3xl mx-auto animate-fadeIn">
+            <h2 className="text-4xl font-black mb-12 text-center italic uppercase">Reglamento</h2>
+            <div className="bg-white p-10 rounded-[2.5rem] shadow-sm border border-gray-100 space-y-8">
+              <section>
+                <h3 className="text-lg font-black mb-2 text-emerald-600 tracking-widest">01. LICENCIAS</h3>
+                <p className="text-gray-600 leading-relaxed">Obligatorio presentar licencia FEDME o RFEA 2026. No se admiten inscripciones sin seguro deportivo.</p>
+              </section>
+              <section>
+                <h3 className="text-lg font-black mb-2 text-emerald-600 tracking-widest">02. MEDIO AMBIENTE</h3>
+                <p className="text-gray-600 leading-relaxed">Carrera "Zero Waste". Queda prohibido el uso de vasos de plástico en avituallamientos. Cada corredor debe llevar su propio recipiente.</p>
+              </section>
+            </div>
+          </div>
+        )}
+        {activeTab === 'inscripciones' && (
+          <div className="py-20 px-4 max-w-3xl mx-auto animate-fadeIn">
+            <div className="text-center mb-10">
+              <h2 className="text-4xl font-black italic text-emerald-600 uppercase">Inscripción Oficial</h2>
+              <p className="text-gray-500 mt-2">Completa el formulario para reservar tu dorsal (30€).</p>
+            </div>
+            
+            <form className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-2xl text-left border border-gray-100 space-y-8">
+                {/* Datos Personales */}
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-2">
+                    <User className="w-4 h-4" /> Datos Personales
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" className="w-full p-4 rounded-xl bg-slate-50 border border-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="Nombre completo" />
+                    <input type="text" className="w-full p-4 rounded-xl bg-slate-50 border border-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="DNI / Pasaporte / Licencia" />
+                    <select className="w-full p-4 rounded-xl bg-slate-50 border border-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-gray-500">
+                      <option disabled selected>Género</option>
+                      <option>Masculino</option>
+                      <option>Femenino</option>
+                      <option>Otro</option>
+                    </select>
+                    <input type="text" className="w-full p-4 rounded-xl bg-slate-50 border border-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="Club perteneciente" />
+                  </div>
+                </div>
+
+                {/* Residencia */}
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-2">
+                    <MapPin className="w-4 h-4" /> Ubicación
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <input type="text" className="w-full p-4 rounded-xl bg-slate-50 border border-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 transition-all md:col-span-1" placeholder="Ciudad de residencia" />
+                    <input type="text" className="w-full p-4 rounded-xl bg-slate-50 border border-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 transition-all md:col-span-1" placeholder="Localidad" />
+                    <input type="text" className="w-full p-4 rounded-xl bg-slate-50 border border-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 transition-all md:col-span-1" placeholder="Código Postal" />
+                  </div>
+                </div>
+
+                {/* Contacto */}
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-2">
+                    <Mail className="w-4 h-4" /> Contacto
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="email" className="w-full p-4 rounded-xl bg-slate-50 border border-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="Correo electrónico" />
+                    <input type="tel" className="w-full p-4 rounded-xl bg-slate-50 border border-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 transition-all" placeholder="Número de teléfono" />
+                  </div>
+                </div>
+
+                {/* Competición */}
+                <div>
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-2">
+                    <Trophy className="w-4 h-4" /> Datos de Carrera
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <select className="w-full p-4 rounded-xl bg-slate-50 border border-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-gray-500">
+                      <option disabled selected>Categoría</option>
+                      <option>Junior (Sub-20)</option>
+                      <option>Promesa (Sub-23)</option>
+                      <option>Absoluta</option>
+                      <option>Veteranos A</option>
+                      <option>Veteranos B</option>
+                    </select>
+                    <select className="w-full p-4 rounded-xl bg-slate-50 border border-slate-100 outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-gray-500">
+                      <option disabled selected>Modalidad de carrera</option>
+                      <option>42K Trail Nacional</option>
+                      <option>20K Trail Medio</option>
+                      <option>8K Trail Junior</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="pt-6 border-t border-slate-100">
+                  <button type="button" className="w-full bg-emerald-600 text-white py-6 rounded-2xl font-black text-xl hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-200 uppercase tracking-widest">
+                    Finalizar y Pagar 30€
+                  </button>
+                  <p className="text-center text-[10px] text-gray-400 mt-4 uppercase font-bold tracking-tighter">Al hacer clic, aceptas el reglamento de la prueba y la política de privacidad de la FEDME.</p>
+                </div>
+            </form>
+          </div>
+        )}
+      </main>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default App;
